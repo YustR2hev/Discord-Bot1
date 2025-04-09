@@ -147,21 +147,17 @@ async def on_message(message):
         except discord.HTTPException:
             print("Failed to react.")
 
-    # if any([x in content_lower.split() for x in ['hello', 'hi', 'ello', 'gm']]):
-    #     try:
-    #         await message.add_reaction('👋')
-    #     except discord.HTTPException:
-    #         print("Failed to react.")
+    if any([x in content_lower.split() for x in ['hello', 'hi', 'ello', 'gm']]):
+        try:
+            await message.add_reaction('👋')
+        except discord.HTTPException:
+            print("Failed to react.")
 
     await client.process_commands(message)
 
 
 @client.event
 async def on_reaction_add(reaction, user):
-    # Prevent the client from reacting to its own reactions
-    if user.client:
-        return
-
     if user.id == 513573197283721226 and str(reaction.emoji) == "🔥":
         try:
             await reaction.message.add_reaction("🔥")
@@ -184,7 +180,7 @@ async def quote(ctx):
         await ctx.send("Channel not found!")
         return
 
-    messages = [msg async for msg in channel.history(limit=1000)]
+    messages = [msg async for msg in channel.history(limit=500)]
 
     if messages:
         for i in range(100):
