@@ -376,7 +376,8 @@ async def bet(ctx, option_number: int, amount: int):
 
 
 @client.command(name="resolve_prediction")
-async def resolve_prediction(ctx, winning_index: int):
+async def resolve_prediction(ctx, winning_number: int):
+    winning_index = winning_number - 1
     pred = predictions.get(ctx.channel.id)
     if not pred:
         await ctx.send("No active prediction to resolve.")
