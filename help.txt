@@ -1,0 +1,29 @@
+General Commands:
+    `!wtf` - wtf
+    `!quote` - Posts a random message from the https://discord.com/channels/1180213372877295736/1303737311720247297
+    `!neco` - Posts a random Neco Arc image
+    `!vile` - Posts the Vile theory
+    `!manifesto` - Posts content from God Manifesto
+    `!lonely` - Posts the lonely copypaste
+    `!truth` - Posts content from The truth under the moonlight
+    `!pet` - Posts the pet copypaste
+    `!skelet` - Posts a skeleton image
+    `!byesexual` - Posts a "byesexual" GIF
+    `!hugo` - Posts Hugo Talking emoji
+    `!latinx` - Posts a "l*tinx" GIF
+    `!yummers` - Posts a "yummers" GIF
+    `!greenhugo` - Posts a green Hu(go)e image
+    `!knights` - Posts a knights approaching message
+    `!arabic` - Posts a random Arabic saying
+    `!arabicmeaning [number]` - Explains the meaning of a specific Arabic saying
+    `!tip` - Posts a random real-world tip
+
+Cookie System Commands:
+    `!givecookie [member]` - Gives a cookie to another user
+    `!cookiescore [member]` - Shows a user's cookie score (defaults to yourself)
+
+Prediction Commands:
+    `!create_prediction ["question"] ["options"] [duration_seconds]` - Creates a new prediction
+    `!bet [option_number] [amount]` - Places a bet on a prediction
+    `!resolve_prediction [winning_index]` - Resolves a prediction
+    `!balance` - Shows your current points balance
