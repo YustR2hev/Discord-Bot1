@@ -147,11 +147,11 @@ async def on_message(message):
         except discord.HTTPException:
             print("Failed to react.")
 
-    if any([x in content_lower.split() for x in ['hello', 'hi', 'ello', 'gm']]):
-        try:
-            await message.add_reaction('👋')
-        except discord.HTTPException:
-            print("Failed to react.")
+    # if any([x in content_lower.split() for x in ['hello', 'hi', 'ello', 'gm']]):
+    #     try:
+    #         await message.add_reaction('👋')
+    #     except discord.HTTPException:
+    #         print("Failed to react.")
 
     await client.process_commands(message)
 
