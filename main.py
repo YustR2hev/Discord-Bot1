@@ -172,10 +172,6 @@ async def wtf(ctx):
     await ctx.send(f'Arty wrote wtf {count} times.')
 
 
-channel = client.get_channel(STAR_CHANNEL_ID)
-messages = [msg async for msg in channel.history(limit=500)]
-
-
 @client.command()
 async def quote(ctx):
     channel = client.get_channel(STAR_CHANNEL_ID)
@@ -426,6 +422,9 @@ async def daily_bonus():
 async def on_ready():
     print(f"Bot is ready. Logged in as {client.user}")
     client.loop.create_task(daily_bonus())
+    
+    channel = client.get_channel(STAR_CHANNEL_ID)
+    messages = [msg async for msg in channel.history(limit=500)]
 
 
 @client.command()
