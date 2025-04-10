@@ -168,7 +168,7 @@ async def on_reaction_add(reaction, user):
 @client.command()
 async def wtf(ctx):
     member = client.get_user(ARTY_ID)
-    count = message_count.get(member, 0)
+    count = message_count.get(member, 2181)
     await ctx.send(f'Arty wrote wtf {count} times.')
 
 
