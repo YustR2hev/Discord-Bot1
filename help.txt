@@ -1,4 +1,5 @@
 General Commands:
+    `!help_ - Shows the list of all commands
     `!wtf` - wtf
     `!quote` - Posts a random message from the https://discord.com/channels/1180213372877295736/1303737311720247297
     `!neco` - Posts a random Neco Arc image
