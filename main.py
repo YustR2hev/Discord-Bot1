@@ -180,7 +180,7 @@ async def quote(ctx):
         await ctx.send("Oops!")
         return
 
-    # messages = [msg async for msg in channel.history(limit=1000)]
+    messages = [msg async for msg in channel.history(limit=1000)]
 
     if messages:
         for i in range(100):
@@ -422,9 +422,6 @@ async def daily_bonus():
 async def on_ready():
     print(f"Bot is ready. Logged in as {client.user}")
     client.loop.create_task(daily_bonus())
-    
-    channel = client.get_channel(STAR_CHANNEL_ID)
-    messages = [msg async for msg in channel.history(limit=500)]
 
 
 @client.command()
