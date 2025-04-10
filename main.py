@@ -29,14 +29,14 @@ predictions = {}
 
 
 class Prediction:
-    def __init__(self, question, options, creator, duration_seconds=3600):  # Default: 5 mins
+    def __init__(self, question, options, creator, duration_seconds=600):  # Default: 5 mins
         self.question = question
         self.options = options
         self.creator = creator
         self.bets = {}
         self.resolved = False
         self.winning_option = None
-        self.deadline = time.time() + duration_seconds
+        self.deadline = time.time() + min(duration_seconds, 3600)
 
     def place_bet(self, user_id, option_index, amount):
         if self.resolved:
@@ -117,7 +117,7 @@ async def on_message(message):
     if 'wtf' in content_lower or 'what the fuck' in content_lower:
         if message.author.id == ARTY_ID:
             if message.author not in message_count:
-                message_count[message.author] = 2171
+                message_count[message.author] = 2181
             message_count[message.author] += 1
 
     if random.randint(1, 1000) <= 3:
@@ -147,7 +147,7 @@ async def on_message(message):
         except discord.HTTPException:
             print("Failed to react.")
 
-    if any([x in content_lower.split() for x in ['hello', 'hi', 'ello', 'gm']]):
+    if any([x in content_lower.split() for x in ['hello', 'hi', 'ello', 'gm', 'gn', 'bye']]):
         try:
             await message.add_reaction('👋')
         except discord.HTTPException:
@@ -172,15 +172,19 @@ async def wtf(ctx):
     await ctx.send(f'Arty wrote wtf {count} times.')
 
 
+channel = client.get_channel(STAR_CHANNEL_ID)
+messages = [msg async for msg in channel.history(limit=500)]
+
+
 @client.command()
 async def quote(ctx):
     channel = client.get_channel(STAR_CHANNEL_ID)
 
     if not channel:
-        await ctx.send("Channel not found!")
+        await ctx.send("Oops!")
         return
 
-    messages = [msg async for msg in channel.history(limit=500)]
+    # messages = [msg async for msg in channel.history(limit=1000)]
 
     if messages:
         for i in range(100):
@@ -188,14 +192,14 @@ async def quote(ctx):
             regex = r"https://discord\.com/channels/(\d+)/(\d+)/(\d+)"
             match = re.match(regex, message_link)
             if not match:
-                return await ctx.send("Invalid link format.")
+                return await ctx.send("Oops.")
             guild_id, channel_id, message_id = map(int, match.groups())
             guild = client.get_guild(guild_id)
             if not guild:
-                return await ctx.send("Guild not found.")
+                return await ctx.send("Oops.")
             channel = guild.get_channel(channel_id)
             if not channel:
-                return await ctx.send("Channel not found.")
+                return await ctx.send("Oops.")
             message = await channel.fetch_message(message_id)
             if len(message.attachments) > 0:
                 continue
@@ -205,7 +209,6 @@ async def quote(ctx):
 
     else:
         await ctx.send("No valid messages found!")
-
 
 @client.command()
 async def neco(ctx):
@@ -404,7 +407,7 @@ async def resolve_prediction(ctx, winning_number: int):
 @client.command(name="balance")
 async def balance(ctx):
     bal = balances[ctx.author.id]
-    await ctx.send(f"{ctx.author.mention}, your current balance is 💰 {bal} points.")
+    await ctx.send(f"{ctx.author.mention}, your current balance is 💰 {bal} kroner.")
 
 
 async def daily_bonus():
@@ -413,9 +416,9 @@ async def daily_bonus():
 
         if active_users:
             for uid in active_users:
-                balances[uid] += 1000
+                balances[uid] = max(1000, balances[uid])
 
-            print(f"Granted +1000 daily bonus to {len(active_users)} users.")
+            print(f"Granted 1000 daily bonus to {len(active_users)} users.")
             active_users.clear()
 
 
