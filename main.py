@@ -7,19 +7,22 @@ from collections import defaultdict
 import asyncio
 import time
 import os
+
 import webserver
 
-
 DISCORD_TOKEN = os.environ['discordkey']
+
 # intents
 intents = discord.Intents.default()
 intents.messages = True
 intents.message_content = True
 intents.members = True
 intents.guilds = True
+intents.reactions = True
 client = commands.Bot(command_prefix='!', intents=intents)
 
 ARTY_ID = 548369997546782730
+ATRY_COUNTER = 2203
 STAR_CHANNEL_ID = 1303737311720247297
 message_count = {}
 user_scores = {}
@@ -120,19 +123,19 @@ async def on_message(message):
                 message_count[message.author] = 2181
             message_count[message.author] += 1
 
-    if random.randint(1, 1000) <= 3:
-        await message.author.timeout(dt.timedelta(minutes=0.5))
+    if random.randint(1, 1000) <= 1:
+        await message.author.timeout(dt.timedelta(seconds=10))
         emoji = client.get_emoji(1359000758888038480)
         await message.channel.send(
-            f"{message.author.display_name} stepped on a landmine. {emoji}\nTimed out for `30` seconds.")
+            f"{message.author.display_name} stepped on a landmine. {emoji}\nTimed out for `10` seconds.")
 
-    if 'sure' in content_lower:
-        emoji1 = client.get_emoji(1356078124499992596)
-        emoji2 = client.get_emoji(1359406795453632553)
-        try:
-            await message.add_reaction(random.choice([emoji1, emoji2]))
-        except discord.HTTPException:
-            print("Failed to react.")
+    # if 'sure' in content_lower:
+    #     emoji1 = client.get_emoji(1356078124499992596)
+    #     emoji2 = client.get_emoji(1359406795453632553)
+    #     try:
+    #         await message.add_reaction(random.choice([emoji1, emoji2]))
+    #     except discord.HTTPException:
+    #         print("Failed to react.")
 
     if 'stupid' in content_lower:
         emoji = client.get_emoji(1356090731067867197)
@@ -168,7 +171,7 @@ async def on_reaction_add(reaction, user):
 @client.command()
 async def wtf(ctx):
     member = client.get_user(ARTY_ID)
-    count = message_count.get(member, 2181)
+    count = message_count.get(member, ATRY_COUNTER)
     await ctx.send(f'Arty wrote wtf {count} times.')
 
 
@@ -180,11 +183,12 @@ async def quote(ctx):
         await ctx.send("Oops!")
         return
 
-    messages = [msg async for msg in channel.history(limit=1000)]
+    messages = [msg async for msg in channel.history(limit=400)]
 
     if messages:
         for i in range(100):
-            message_link = str(random.choice(messages).content.split()[3])
+            message_link = str(random.choice(messages).content.split()[-1])
+
             regex = r"https://discord\.com/channels/(\d+)/(\d+)/(\d+)"
             match = re.match(regex, message_link)
             if not match:
@@ -200,11 +204,15 @@ async def quote(ctx):
             if len(message.attachments) > 0:
                 continue
             else:
-                await ctx.send(f"{message.content}\n\n- {message.author.display_name}")
+                if "@" in message.content:
+                    t = message.content.replace('@', '')
+                else:
+                    await ctx.send(f"{message.content}\n\n- {message.author.display_name}")
                 break
 
     else:
         await ctx.send("No valid messages found!")
+
 
 @client.command()
 async def neco(ctx):
@@ -310,6 +318,15 @@ async def yummers(ctx):
 
 
 @client.command()
+async def punch(ctx):
+    image_url = 'https://media.discordapp.net/attachments/1303737490238083082/1360387798703804596/makima-bean.gif?ex=67faef5d&is=67f99ddd&hm=e420b6e7c0dbf08bd371ac761c5f736b2e2198cc81834a7709233d4e5dea459c'
+
+    embed = discord.Embed(color=discord.Color.red())
+    embed.set_image(url=image_url)
+    await ctx.send(embed=embed)
+
+
+@client.command()
 async def greenhugo(ctx):
     image_url = 'https://media.discordapp.net/attachments/532964604683354112/1304482949332467804/EndingA_HUGOnodomek.png?ex=67f7492b&is=67f5f7ab&hm=88db764de87aee7757b19efd440f43da756f2c638f64683836165302aedde5a8&=&format=webp'
 
@@ -341,7 +358,7 @@ async def tip(ctx):
     # embed = discord.Embed(color=discord.Color.dark_embed())
     # embed.set_image(url=image_url)
 
-    no = random.randint(0, 16)
+    no = random.randint(0, len(tips_) - 1)
     await ctx.send(f"`Real world tip № {no}:`\n```{tips_[no]}```")
 
 
@@ -427,6 +444,35 @@ async def on_ready():
 @client.command()
 async def help_(ctx):
     await ctx.send(''.join(help1))
+
+
+@client.command()
+async def react(ctx, message_link: str, emoji: str):
+    """React to a message using its link. Usage: !react <message_link> <emoji>"""
+    # Regex to parse Discord message links
+    regex = r"https://discord\.com/channels/(\d+)/(\d+)/(\d+)"
+    match = re.match(regex, message_link)
+
+    if not match:
+        await ctx.send("❌ Invalid message link format. Use: `https://discord.com/channels/...`")
+        return
+
+    # Extract IDs from the link
+    _, channel_id, message_id = match.groups()
+    channel = client.get_channel(int(channel_id))
+
+    if not match:
+        return await ctx.send("Oops.")
+    guild_id, channel_id, message_id = map(int, match.groups())
+    guild = client.get_guild(guild_id)
+    if not guild:
+        return await ctx.send("Oops.")
+    channel = guild.get_channel(channel_id)
+    if not channel:
+        return await ctx.send("Oops.")
+    message = await channel.fetch_message(int(message_id))
+    await message.add_reaction(emoji)
+
 
 webserver.keep_alive()
 client.run(DISCORD_TOKEN)
