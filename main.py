@@ -447,7 +447,7 @@ async def help_(ctx):
 
 
 @client.command()
-async def react(ctx, message_link: str, emoji: str):
+async def react(ctx, message_link: str, emoji: int):
     """React to a message using its link. Usage: !react <message_link> <emoji>"""
     # Regex to parse Discord message links
     regex = r"https://discord\.com/channels/(\d+)/(\d+)/(\d+)"
@@ -471,8 +471,8 @@ async def react(ctx, message_link: str, emoji: str):
     if not channel:
         return await ctx.send("Oops.")
     message = await channel.fetch_message(int(message_id))
-    emoji = client.get_emoji(emoji)
-    await message.add_reaction(emoji)
+    emoji_ = client.get_emoji(emoji)
+    await message.add_reaction(emoji_)
 
 
 webserver.keep_alive()
