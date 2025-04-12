@@ -22,7 +22,7 @@ intents.reactions = True
 client = commands.Bot(command_prefix='!', intents=intents)
 
 ARTY_ID = 548369997546782730
-ATRY_COUNTER = 2203
+ATRY_COUNTER = 2200
 STAR_CHANNEL_ID = 1303737311720247297
 message_count = {}
 user_scores = {}
@@ -471,6 +471,7 @@ async def react(ctx, message_link: str, emoji: str):
     if not channel:
         return await ctx.send("Oops.")
     message = await channel.fetch_message(int(message_id))
+    emoji = client.get_emoji(message_id)
     await message.add_reaction(emoji)
 
 
