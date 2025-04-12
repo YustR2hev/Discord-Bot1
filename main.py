@@ -471,7 +471,7 @@ async def react(ctx, message_link: str, emoji: str):
     if not channel:
         return await ctx.send("Oops.")
     message = await channel.fetch_message(int(message_id))
-    emoji = client.get_emoji(message_id)
+    emoji = client.get_emoji(emoji)
     await message.add_reaction(emoji)
 
 
