@@ -22,7 +22,7 @@ intents.reactions = True
 client = commands.Bot(command_prefix='!', intents=intents)
 
 ARTY_ID = 548369997546782730
-ATRY_COUNTER = 2200
+ATRY_COUNTER = 2248
 STAR_CHANNEL_ID = 1303737311720247297
 message_count = {}
 user_scores = {}
@@ -120,7 +120,7 @@ async def on_message(message):
     if 'wtf' in content_lower or 'what the fuck' in content_lower:
         if message.author.id == ARTY_ID:
             if message.author not in message_count:
-                message_count[message.author] = 2181
+                message_count[message.author] = ATRY_COUNTER
             message_count[message.author] += 1
 
     if random.randint(1, 1000) <= 1:
@@ -150,11 +150,11 @@ async def on_message(message):
         except discord.HTTPException:
             print("Failed to react.")
 
-    if any([x in content_lower.split() for x in ['hello', 'hi', 'ello', 'gm', 'gn', 'bye']]):
-        try:
-            await message.add_reaction('👋')
-        except discord.HTTPException:
-            print("Failed to react.")
+    # if any([x in content_lower.split() for x in ['hello', 'hi', 'ello', 'gm', 'gn', 'bye']]):
+    #     try:
+    #         await message.add_reaction('👋')
+    #     except discord.HTTPException:
+    #         print("Failed to react.")
 
     await client.process_commands(message)
 
