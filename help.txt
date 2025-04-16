@@ -18,6 +18,7 @@ General Commands:
     `!arabic` - Posts a random Arabic saying
     `!arabicmeaning [number]` - Explains the meaning of a specific Arabic saying
     `!tip` - Posts a random real-world tip
+    `!react [message_link] [emoji_id]` - React to a chosen message with any(even animated) emoji 
 
 Cookie System Commands:
     `!givecookie [member]` - Gives a cookie to another user
