@@ -186,29 +186,29 @@ async def quote(ctx):
     messages = [msg async for msg in channel.history(limit=400)]
 
     if messages:
-        for i in range(100):
-            message_link = str(random.choice(messages).content.split()[-1])
+        # for i in range(100):
+        message_link = str(random.choice(messages).content.split()[-1])
 
-            regex = r"https://discord\.com/channels/(\d+)/(\d+)/(\d+)"
-            match = re.match(regex, message_link)
-            if not match:
-                return await ctx.send("Oops.")
-            guild_id, channel_id, message_id = map(int, match.groups())
-            guild = client.get_guild(guild_id)
-            if not guild:
-                return await ctx.send("Oops.")
-            channel = guild.get_channel(channel_id)
-            if not channel:
-                return await ctx.send("Oops.")
-            message = await channel.fetch_message(message_id)
-            if len(message.attachments) > 0:
-                continue
+        regex = r"https://discord\.com/channels/(\d+)/(\d+)/(\d+)"
+        match = re.match(regex, message_link)
+        if not match:
+            return await ctx.send("Oops.")
+        guild_id, channel_id, message_id = map(int, match.groups())
+        guild = client.get_guild(guild_id)
+        if not guild:
+            return await ctx.send("Oops.")
+        channel = guild.get_channel(channel_id)
+        if not channel:
+            return await ctx.send("Oops.")
+        message = await channel.fetch_message(message_id)
+        # if len(message.attachments) > 0:
+        #     continue
+        else:
+            if "@" in message.content:
+                t = message.content.replace('@', '')
             else:
-                if "@" in message.content:
-                    t = message.content.replace('@', '')
-                else:
-                    await ctx.send(f"{message.content}\n\n- {message.author.display_name}")
-                break
+                await ctx.send(f"{message.content}\n\n- {message.author.display_name}")
+            break
 
     else:
         await ctx.send("No valid messages found!")
