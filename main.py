@@ -22,7 +22,7 @@ intents.reactions = True
 client = commands.Bot(command_prefix='!', intents=intents)
 
 ARTY_ID = 548369997546782730
-ATRY_COUNTER = 2248
+ATRY_COUNTER = 2283
 STAR_CHANNEL_ID = 1303737311720247297
 message_count = {}
 user_scores = {}
@@ -203,13 +203,10 @@ async def quote(ctx):
         message = await channel.fetch_message(message_id)
         # if len(message.attachments) > 0:
         #     continue
+        if "@" in message.content:
+            t = message.content.replace('@', '')
         else:
-            if "@" in message.content:
-                t = message.content.replace('@', '')
-            else:
-                await ctx.send(f"{message.content}\n\n- {message.author.display_name}")
-            break
-
+            await ctx.send(f"{message.content}\n\n- {message.author.display_name}")
     else:
         await ctx.send("No valid messages found!")
 
