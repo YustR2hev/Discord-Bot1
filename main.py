@@ -110,7 +110,7 @@ async def on_message(message):
         embed.set_image(url=image_url)
         await message.channel.send(embed=embed)
 
-    if "invincible" in content_lower or 'invisible' in content_lower:
+    if ("invincible" in content_lower or 'invisible' in content_lower) and len(message.attachments) > 0:
         image_url = 'https://c.tenor.com/Q329gflKk7sAAAAC/tenor.gif'
 
         embed = discord.Embed(color=discord.Color.blue())
