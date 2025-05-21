@@ -501,11 +501,11 @@ async def roletext(ctx):
         for i in range(5):
             if i == 2:
                 talisman = client.get_emoji(1374611327494131742)
-                await ctx.send(rolestext[i], talisman)
+                await ctx.send(f"{rolestext[i]} {talisman}")
             else:
                 await ctx.send(rolestext[i])
         for line, emote in zip(rolestext[5:], emote_list):
-            await ctx.send(line, emote)
+            await ctx.send(f"{line} {emote}")
     else:
         return
 
