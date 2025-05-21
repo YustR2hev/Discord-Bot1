@@ -31,16 +31,7 @@ balances = defaultdict(lambda: 1000)
 predictions = {}
 
 reaction_roles = {
-    1374734118713163914: {
-        'emoji1': {
-            'emoji': '1374611327494131742',
-            'role_id': 1374205087970492556
-        },
-        'emoji2': {
-            'emoji': '<:custom_emoji_name2:custom_emoji_id2>',
-            'role_id': 123456789012345679
-        },
-    }
+        '1374611327494131742': 1374205087970492556,
 }
 
 
@@ -186,25 +177,28 @@ async def on_reaction_add(reaction, user):
             await reaction.message.add_reaction("🔥")
         except discord.HTTPException:
             print("Failed to react.")
-    
+
     if user.bot:
         return
-    
-    if reaction.message.id not in reaction_roles:
+
+    channel_roles = client.get_channel(1374607125543784479)
+    msg = [msg async for msg in channel_roles.history(limit=1)][0]
+
+    if reaction.message.id != msg.id:
         return
-    
+
     emoji_id = str(reaction.emoji.id) if hasattr(reaction.emoji, 'id') else str(reaction.emoji)
-    
+
     if emoji_id not in reaction_roles[reaction.message.id]:
         return
-    
-    role_id = reaction_roles[reaction.message.id][emoji_id]
+
+    role_id = reaction_roles[emoji_id]
     guild = reaction.message.guild
     role = guild.get_role(role_id)
-    
+
     if not role:
         return
-    
+
     try:
         member = guild.fetch_member(user.id)
         if member:
