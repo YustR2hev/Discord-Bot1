@@ -186,7 +186,7 @@ async def on_reaction_add(reaction, user):
             await reaction.message.add_reaction("🔥")
         except discord.HTTPException:
             print("Failed to react.")
-            
+
     if user.bot:
         return
 
@@ -206,7 +206,7 @@ async def on_reaction_add(reaction, user):
         return
 
     try:
-        member = guild.get_member(user.id)
+        member = guild.fetch_member(user.id)
         if member:
             await member.add_roles(role)
     except Exception as e:
