@@ -30,6 +30,19 @@ active_users = set()
 balances = defaultdict(lambda: 1000)
 predictions = {}
 
+reaction_roles = {
+    1374734118713163914: {
+        'emoji1': {
+            'emoji': '<:everwatching_talisman:1374611327494131742>',
+            'role_id': 1374205087970492556
+        },
+        'emoji2': {
+            'emoji': '<:custom_emoji_name2:custom_emoji_id2>',
+            'role_id': 123456789012345679
+        },
+    }
+}
+
 
 class Prediction:
     def __init__(self, question, options, creator, duration_seconds=600):  # Default: 5 mins
@@ -525,21 +538,34 @@ async def giverole(ctx, *, role_name: str):
     pass
 
 
-# @client.event
-# async def on_reaction_add(reaction, user):
-#     # Check if the reaction is from a bot
-#     if user.bot:
-#         return
-#
-#     # Check if the reaction is on the specific message
-#     if reaction.message.channel.id == CHANNEL_ID and reaction.message.id == MESSAGE_ID:
-#         guild = reaction.message.guild
-#         role = guild.get_role(ROLE_ID)
-#
-#         if role:
-#             member = guild.get_member(user.id)
-#             await member.add_roles(role)
-#             print(f'Assigned {role.name} to {member.name}')
+@client.event
+async def on_reaction_add(reaction, user):
+    if user.bot:
+        return
+
+    if reaction.message.id in reaction_roles:
+        for key, role_info in reaction_roles[reaction.message.id].items():
+            if str(reaction.emoji) == role_info['emoji']:
+                guild = reaction.message.guild
+                role = guild.get_role(role_info['role_id'])
+                if role:
+                    member = guild.get_member(user.id)
+                    await member.add_roles(role)
+
+
+@client.event
+async def on_reaction_remove(reaction, user):
+    if user.bot:
+        return
+
+    if reaction.message.id in reaction_roles:
+        for key, role_info in reaction_roles[reaction.message.id].items():
+            if str(reaction.emoji) == role_info['emoji']:
+                guild = reaction.message.guild
+                role = guild.get_role(role_info['role_id'])
+                if role:
+                    member = guild.get_member(user.id)
+                    await member.remove_roles(role)
 
 
 webserver.keep_alive()
