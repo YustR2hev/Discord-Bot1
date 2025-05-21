@@ -31,7 +31,7 @@ balances = defaultdict(lambda: 1000)
 predictions = {}
 
 reaction_roles = {
-        '1374611327494131742': 1374205087970492556,
+    '1374611327494131742': 1374205087970492556,
 }
 
 
@@ -205,6 +205,38 @@ async def on_reaction_add(reaction, user):
             await member.add_roles(role)
     except Exception as e:
         print(f"Failed to add role: {e}")
+
+
+@client.event
+async def on_reaction_remove(reaction, user):
+    if user.bot:
+        return
+
+    channel_roles = client.get_channel(1374607125543784479)
+    msg = [msg async for msg in channel_roles.history(limit=1)][0]
+
+    if reaction.message.id != msg.id:
+        return
+
+    emoji_id = str(reaction.emoji.id) if hasattr(reaction.emoji, 'id') else str(reaction.emoji)
+
+    if emoji_id not in reaction_roles.keys():
+        return
+
+    # Get the role
+    role_id = reaction_roles[str(emoji_id)]
+    guild = reaction.message.guild
+    role = guild.get_role(role_id)
+
+    if not role:
+        return
+
+    try:
+        member = await guild.fetch_member(user.id)
+        if member:
+            await member.remove_roles(role)
+    except Exception as e:
+        print(f"Failed to remove role: {e}")
 
 
 @client.command()
@@ -555,22 +587,6 @@ async def roletext(ctx):
 @client.command()
 async def giverole(ctx, *, role_name: str):
     pass
-
-
-
-@client.event
-async def on_reaction_remove(reaction, user):
-    if user.bot:
-        return
-
-    if reaction.message.id in reaction_roles:
-        for key, role_info in reaction_roles[reaction.message.id].items():
-            if str(reaction.emoji) == role_info['emoji']:
-                guild = reaction.message.guild
-                role = guild.get_role(role_info['role_id'])
-                if role:
-                    member = guild.get_member(user.id)
-                    await member.remove_roles(role)
 
 
 webserver.keep_alive()
