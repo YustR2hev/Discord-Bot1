@@ -186,31 +186,31 @@ async def on_reaction_add(reaction, user):
             await reaction.message.add_reaction("🔥")
         except discord.HTTPException:
             print("Failed to react.")
-    # 
-    # if user.bot:
-    #     return
-    # 
-    # if reaction.message.id not in reaction_roles:
-    #     return
-    # 
-    # emoji_id = str(reaction.emoji.id) if hasattr(reaction.emoji, 'id') else str(reaction.emoji)
-    # 
-    # if emoji_id not in reaction_roles[reaction.message.id]:
-    #     return
-    # 
-    # role_id = reaction_roles[reaction.message.id][emoji_id]
-    # guild = reaction.message.guild
-    # role = guild.get_role(role_id)
-    # 
-    # if not role:
-    #     return
-    # 
-    # try:
-    #     member = guild.fetch_member(user.id)
-    #     if member:
-    #         await member.add_roles(role)
-    # except Exception as e:
-    #     print(f"Failed to add role: {e}")
+    
+    if user.bot:
+        return
+    
+    if reaction.message.id not in reaction_roles:
+        return
+    
+    emoji_id = str(reaction.emoji.id) if hasattr(reaction.emoji, 'id') else str(reaction.emoji)
+    
+    if emoji_id not in reaction_roles[reaction.message.id]:
+        return
+    
+    role_id = reaction_roles[reaction.message.id][emoji_id]
+    guild = reaction.message.guild
+    role = guild.get_role(role_id)
+    
+    if not role:
+        return
+    
+    try:
+        member = guild.fetch_member(user.id)
+        if member:
+            await member.add_roles(role)
+    except Exception as e:
+        print(f"Failed to add role: {e}")
 
 
 @client.command()
