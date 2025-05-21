@@ -499,12 +499,12 @@ async def roletext(ctx):
     role2 = discord.utils.get(ctx.guild.roles, name="Old God")
 
     if role1 in ctx.author.roles or role2 in ctx.author.roles:
-        for i in range(4):
+        for i in range(5):
             if i == 2:
                 talisman = client.get_emoji(1374611327494131742)
                 await ctx.send(f"{rolestext[i].strip()} {str(talisman)}")
-            else:
-                await ctx.send(rolestext[i])
+            elif rolestext[i].strip():
+                await ctx.send(rolestext[i].strip())
         for line, emote in zip(rolestext[5:], emote_list):
             await ctx.send(f"\n{line.strip()} {str(emote)}")
     else:
