@@ -221,7 +221,7 @@ async def quote(ctx):
         else:
             t = message.content
 
-        if len(message.attachments) > 0:
+        if message.embeds:
             await ctx.send(f"{t}\n\n- {message.author.display_name}", embed=message.embeds[0])
         else:
             await ctx.send(f"{t}\n\n- {message.author.display_name}")
