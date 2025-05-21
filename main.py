@@ -96,7 +96,6 @@ with open('truth.txt', 'r', encoding='utf-8') as f:
 
 with open('Necoarc_links.txt', 'r', encoding='utf-8') as f: neco_arc_images = f.readlines()
 
-
 messages = []
 order = [range(len(messages))]
 random.shuffle(order)
@@ -225,12 +224,40 @@ async def quote(ctx):
         if message.content:
             await ctx.send(f"{t}\n\n- {message.author.display_name}")
 
-        for embed in message.embeds:
-            await ctx.send(embed=embed)
-
         for attachment in message.attachments:
             file = await attachment.to_file()
             await ctx.send(file=file)
+    else:
+        await ctx.send("No valid messages found!")
+
+
+@client.command()
+async def test(ctx):
+    message_link = "https://discord.com/channels/1180213372877295736/1180218435192500337/1365787095037382776"
+    regex = r"https://discord\.com/channels/(\d+)/(\d+)/(\d+)"
+    match = re.match(regex, message_link)
+    if not match:
+        return await ctx.send("Oops.")
+    guild_id, channel_id, message_id = map(int, match.groups())
+    guild = client.get_guild(guild_id)
+    if not guild:
+        return await ctx.send("Oops.")
+    channel2 = guild.get_channel(channel_id)
+    if not channel2:
+        return await ctx.send("Oops.")
+    message = await channel2.fetch_message(message_id)
+    if "@" in message.content:
+        t = message.content.replace('@', '')
+    else:
+        t = message.content
+
+    if message.content:
+        await ctx.send(f"{t}\n\n- {message.author.display_name}")
+
+    for attachment in message.attachments:
+        file = await attachment.to_file()
+        await ctx.send(file=file)
+
     else:
         await ctx.send("No valid messages found!")
 
