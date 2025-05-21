@@ -22,7 +22,7 @@ intents.reactions = True
 client = commands.Bot(command_prefix='!', intents=intents)
 
 ARTY_ID = 548369997546782730
-ATRY_COUNTER = 2283
+ATRY_COUNTER = 1145 + 1223
 STAR_CHANNEL_ID = 1303737311720247297
 message_count = {}
 user_scores = {}
@@ -227,37 +227,6 @@ async def quote(ctx):
         for attachment in message.attachments:
             file = await attachment.to_file()
             await ctx.send(file=file)
-    else:
-        await ctx.send("No valid messages found!")
-
-
-@client.command()
-async def test(ctx):
-    message_link = "https://discord.com/channels/1180213372877295736/1180218435192500337/1365787095037382776"
-    regex = r"https://discord\.com/channels/(\d+)/(\d+)/(\d+)"
-    match = re.match(regex, message_link)
-    if not match:
-        return await ctx.send("Oops.")
-    guild_id, channel_id, message_id = map(int, match.groups())
-    guild = client.get_guild(guild_id)
-    if not guild:
-        return await ctx.send("Oops.")
-    channel2 = guild.get_channel(channel_id)
-    if not channel2:
-        return await ctx.send("Oops.")
-    message = await channel2.fetch_message(message_id)
-    if "@" in message.content:
-        t = message.content.replace('@', '')
-    else:
-        t = message.content
-
-    if message.content:
-        await ctx.send(f"{t}\n\n- {message.author.display_name}")
-
-    for attachment in message.attachments:
-        file = await attachment.to_file()
-        await ctx.send(file=file)
-
     else:
         await ctx.send("No valid messages found!")
 
@@ -525,10 +494,14 @@ async def react(ctx, message_link: str, emoji: int):
 
 @client.command()
 async def roletext(ctx):
+    emote_list = [client.get_emoji(1188201048465219615)]
     role1 = discord.utils.get(ctx.guild.roles, name="Green Hue")
     role2 = discord.utils.get(ctx.guild.roles, name="Old God")
     if role1 in ctx.author.roles or role2 in ctx.author.roles:
-        await ctx.send(''.join(rolestext).replace(':hugo:', client.get_emoji(1188201048465219615)))
+        for line in rolestext[:5]:
+            await ctx.send(line)
+        for line, emote in zip(rolestext[5:], emote_list):
+            await ctx.send(line, emote)
     else:
         return
 
