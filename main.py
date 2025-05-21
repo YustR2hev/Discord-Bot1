@@ -96,7 +96,7 @@ with open('truth.txt', 'r', encoding='utf-8') as f:
 
 with open('Necoarc_links.txt', 'r', encoding='utf-8') as f: neco_arc_images = f.readlines()
 
-channel = client.get_channel(STAR_CHANNEL_ID)
+
 messages = []
 order = [range(len(messages))]
 random.shuffle(order)
@@ -185,7 +185,8 @@ async def wtf(ctx):
 
 @client.command()
 async def quote(ctx):
-    global channel, messages, order, ind, lim
+    global messages, order, ind, lim
+    channel = client.get_channel(STAR_CHANNEL_ID)
 
     if ind == lim:
         messages = [msg async for msg in channel.history(limit=None)]
@@ -494,7 +495,7 @@ async def roletext(ctx):
     role1 = discord.utils.get(ctx.guild.roles, name="Green Hue")
     role2 = discord.utils.get(ctx.guild.roles, name="Old God")
     if role1 in ctx.author.roles or role2 in ctx.author.roles:
-        await ctx.send(''.join(rolestext))
+        await ctx.send(''.join(rolestext).replace(':hugo:', client.get_emoji(1188201048465219615)))
     else:
         return
 
@@ -509,12 +510,12 @@ async def giverole(ctx, *, role_name: str):
 #     # Check if the reaction is from a bot
 #     if user.bot:
 #         return
-# 
+#
 #     # Check if the reaction is on the specific message
 #     if reaction.message.channel.id == CHANNEL_ID and reaction.message.id == MESSAGE_ID:
 #         guild = reaction.message.guild
 #         role = guild.get_role(ROLE_ID)
-# 
+#
 #         if role:
 #             member = guild.get_member(user.id)
 #             await member.add_roles(role)
