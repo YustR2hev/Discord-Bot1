@@ -183,7 +183,6 @@ async def wtf(ctx):
     await ctx.send(f'Arty wrote wtf {count} times.')
 
 
-@client.command()
 async def quote(ctx):
     global messages, order, ind, lim
     channel = client.get_channel(STAR_CHANNEL_ID)
@@ -196,65 +195,78 @@ async def quote(ctx):
         lim = len(messages)
 
     if not channel:
-        await ctx.send("Oops!")
+        await ctx.send("Oops! Channel not found")
         return
 
-    if messages:
-        # for i in range(100):
-        message_link = str(messages[ind].content.split()[-1])
-        ind += 1
+    if not messages:
+        await ctx.send("No valid messages found!")
+        return
 
-        regex = r"https://discord\.com/channels/(\d+)/(\d+)/(\d+)"
-        match = re.match(regex, message_link)
-        if not match:
-            return await ctx.send("Oops.")
-        guild_id, channel_id, message_id = map(int, match.groups())
-        guild = client.get_guild(guild_id)
-        if not guild:
-            return await ctx.send("Oops.")
-        channel2 = guild.get_channel(channel_id)
-        if not channel2:
-            return await ctx.send("Oops.")
-        message = await channel2.fetch_message(message_id)
-        if "@" in message.content:
-            t = message.content.replace('@', '')
-        else:
-            t = message.content
+    message_link = str(messages[order[ind]].content.split()[-1])
+    ind += 1
 
-        if message.embeds:
-            embed = message.embeds[0]
-            # Copy important fields to a new embed to maintain structure
-            new_embed = discord.Embed(
-                title=embed.title if embed.title else None,
-                description=embed.description if embed.description else None,
-                color=embed.color if embed.color else None,
-                url=embed.url if embed.url else None
+    regex = r"https://discord\.com/channels/(\d+)/(\d+)/(\d+)"
+    match = re.match(regex, message_link)
+    if not match:
+        return await ctx.send("Invalid message link format.")
+
+    guild_id, channel_id, message_id = map(int, match.groups())
+    guild = client.get_guild(guild_id)
+    if not guild:
+        return await ctx.send("Original server not found.")
+
+    channel2 = guild.get_channel(channel_id)
+    if not channel2:
+        return await ctx.send("Original channel not found.")
+
+    message = await channel2.fetch_message(message_id)
+
+    # Clean content and truncate if too long
+    t = message.content.replace('@', '') if "@" in message.content else message.content
+    t = t[:2000]  # Truncate to 2000 characters to be safe
+
+    # Handle embeds
+    if message.embeds:
+        embed = message.embeds[0]
+        new_embed = discord.Embed(
+            title=embed.title if embed.title else "Quote",
+            description=embed.description if embed.description else "No description",
+            color=embed.color if embed.color else discord.Color.random()
+        )
+
+        # Copy image if exists
+        if embed.image:
+            new_embed.set_image(url=embed.image.url)
+
+        # Copy author information
+        if embed.author:
+            new_embed.set_author(
+                name=embed.author.name,
+                url=embed.author.url,
+                icon_url=embed.author.icon_url
             )
 
-            # Copy image if exists
-            if embed.image:
-                new_embed.set_image(url=embed.image.url)
+        # Copy footer if exists
+        if embed.footer:
+            new_embed.set_footer(
+                text=embed.footer.text,
+                icon_url=embed.footer.icon_url
+            )
 
-            # Copy author information
-            if embed.author:
-                new_embed.set_author(
-                    name=embed.author.name,
-                    url=embed.author.url,
-                    icon_url=embed.author.icon_url
-                )
-
-            # Copy footer if exists
-            if embed.footer:
-                new_embed.set_footer(
-                    text=embed.footer.text,
-                    icon_url=embed.footer.icon_url
-                )
-
-            await ctx.send(f"{t}\n\n- {message.author.display_name}\n{order[50:]}\n{len(order)}\n{ind}", embed=new_embed)
+        # Split into two messages if content is too long
+        if len(t) > 1000:
+            await ctx.send(t[:1000])
+            await ctx.send(t[1000:], embed=new_embed)
+        else:
+            await ctx.send(t, embed=new_embed)
+    else:
+        # Split long messages into chunks
+        if len(t) > 2000:
+            chunks = [t[i:i + 2000] for i in range(0, len(t), 2000)]
+            for chunk in chunks:
+                await ctx.send(chunk)
         else:
             await ctx.send(f"{t}\n\n- {message.author.display_name}")
-    else:
-        await ctx.send("No valid messages found!")
 
 
 @client.command()
