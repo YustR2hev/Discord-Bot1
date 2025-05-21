@@ -3,4 +3,4 @@ React to give yourself a role.
 `Everwatching Talisman` - :everwatching_talisman:
 
 **CUSTOM ROLES:**
-`[work in progress]` - :hugo:
+`[work in progress]` - 
