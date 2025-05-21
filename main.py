@@ -285,12 +285,15 @@ async def quote(ctx):
         else:
             t = message.content
 
-        if message.content:
-            await ctx.send(f"{t}\n\n- {message.author.display_name}")
-
-        for attachment in message.attachments:
-            file = await attachment.to_file()
-            await ctx.send(file=file)
+        if message.attachments:
+            file = await message.attachments[0].to_file()
+            if message.content:
+                await ctx.send(f"{t}\n\n- {message.author.display_name}", file=file)
+            else:
+                await ctx.send(f"- {message.author.display_name}", file=file)
+        else:
+            if message.content:
+                await ctx.send(f"{t}\n\n- {message.author.display_name}")
     else:
         await ctx.send("No valid messages found!")
 
