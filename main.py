@@ -86,6 +86,7 @@ with open('pet.txt', 'r', encoding='utf-8') as f: pet_ = f.readline()
 with open('Arabic.txt', 'r', encoding='utf-8') as f: arabic_ = f.readlines()
 with open('tips.txt', 'r', encoding='utf-8') as f: tips_ = f.readlines()
 with open('help.txt', 'r', encoding='utf-8') as f: help1 = f.readlines()
+with open('roles2.txt', 'r', encoding='utf-8') as f: rolestext = f.readlines()
 with open('Manifesto.txt', 'r', encoding='utf-8') as f:
     manifesto_ = f.readlines()
     manifesto_ = '\n'.join(manifesto_)
@@ -486,6 +487,38 @@ async def react(ctx, message_link: str, emoji: int):
     message = await channel.fetch_message(int(message_id))
     emoji_ = client.get_emoji(emoji)
     await message.add_reaction(emoji_)
+
+
+@client.command()
+async def roletext(ctx):
+    role1 = discord.utils.get(ctx.guild.roles, name="Green Hue")
+    role2 = discord.utils.get(ctx.guild.roles, name="Old God")
+    if role1 in ctx.author.roles or role2 in ctx.author.roles:
+        await ctx.send(''.join(rolestext))
+    else:
+        return
+
+
+@client.command()
+async def giverole(ctx, *, role_name: str):
+    pass
+
+
+# @client.event
+# async def on_reaction_add(reaction, user):
+#     # Check if the reaction is from a bot
+#     if user.bot:
+#         return
+# 
+#     # Check if the reaction is on the specific message
+#     if reaction.message.channel.id == CHANNEL_ID and reaction.message.id == MESSAGE_ID:
+#         guild = reaction.message.guild
+#         role = guild.get_role(ROLE_ID)
+# 
+#         if role:
+#             member = guild.get_member(user.id)
+#             await member.add_roles(role)
+#             print(f'Assigned {role.name} to {member.name}')
 
 
 webserver.keep_alive()
