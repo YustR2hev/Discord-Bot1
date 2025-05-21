@@ -504,9 +504,8 @@ async def roletext(ctx):
                 await ctx.send(f"{rolestext[i]} {talisman}")
             else:
                 await ctx.send(rolestext[i])
-        await ctx.send('\n')
         for line, emote in zip(rolestext[4:], emote_list):
-            await ctx.send(f"{line} {emote}")
+            await ctx.send(f"\n'{line} {emote}")
     else:
         return
 
