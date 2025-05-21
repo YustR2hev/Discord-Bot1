@@ -192,7 +192,7 @@ async def quote(ctx):
         messages = [msg async for msg in channel.history(limit=None)]
         order = [range(len(messages))]
         random.shuffle(order)
-        print(order[:50]
+        print(order[:50])
         ind = 0
         lim = len(messages)
 
