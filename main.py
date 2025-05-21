@@ -192,6 +192,7 @@ async def quote(ctx):
         messages = [msg async for msg in channel.history(limit=None)]
         order = [range(len(messages))]
         random.shuffle(order)
+        print(order[:50]
         ind = 0
         lim = len(messages)
 
@@ -221,8 +222,10 @@ async def quote(ctx):
         else:
             t = message.content
 
-        if len(message.attachments) > 0:
-            await ctx.send(f"{t}\n\n- {message.author.display_name}", embed=message.embeds)
+        if message.embeds:
+            embed = message.embeds[0]
+            if embed is not None:
+                await ctx.send(f"{t}\n\n- {message.author.display_name}", embed=embed)
         else:
             await ctx.send(f"{t}\n\n- {message.author.display_name}")
     else:
