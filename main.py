@@ -189,18 +189,18 @@ async def on_reaction_add(reaction, user):
 
     emoji_id = str(reaction.emoji.id) if hasattr(reaction.emoji, 'id') else str(reaction.emoji)
 
-    if emoji_id not in reaction_roles[reaction.message.id]:
+    if emoji_id not in reaction_roles.keys():
         return
 
-    role_id = reaction_roles[emoji_id]
-    guild = reaction.message.guild
+    role_id = reaction_roles[str(emoji_id)]
+    guild = await reaction.message.guild
     role = guild.get_role(role_id)
 
     if not role:
         return
 
     try:
-        member = await guild.fetch_member(user.id)
+        member = guild.fetch_member(user.id)
         if member:
             await member.add_roles(role)
     except Exception as e:
