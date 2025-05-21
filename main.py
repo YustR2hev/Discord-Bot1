@@ -201,8 +201,8 @@ async def quote(ctx):
 
     if messages:
         # for i in range(100):
-        message_link = str(messages[ind].content.split()[-1])
-        # message_link = str(messages[order[ind]].content.split()[-1])
+        # message_link = str(messages[ind].content.split()[-1])
+        message_link = str(messages[order[ind]].content.split()[-1])
         ind += 1
 
         regex = r"https://discord\.com/channels/(\d+)/(\d+)/(\d+)"
@@ -223,7 +223,7 @@ async def quote(ctx):
             t = message.content
 
         if message.content:
-            await ctx.send(message.content)
+            await ctx.send(f"{t}\n\n- {message.author.display_name}")
 
         for embed in message.embeds:
             await ctx.send(embed=embed)
