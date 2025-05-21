@@ -190,9 +190,8 @@ async def quote(ctx):
 
     if ind == lim:
         messages = [msg async for msg in channel.history(limit=None)]
-        order = [range(len(messages))]
+        order = list(range(len(messages)))
         random.shuffle(order)
-        print(order[:50])
         ind = 0
         lim = len(messages)
 
@@ -224,8 +223,34 @@ async def quote(ctx):
 
         if message.embeds:
             embed = message.embeds[0]
-            if embed is not None:
-                await ctx.send(f"{t}\n\n- {message.author.display_name}", embed=embed)
+            # Copy important fields to a new embed to maintain structure
+            new_embed = discord.Embed(
+                title=embed.title if embed.title else None,
+                description=embed.description if embed.description else None,
+                color=embed.color if embed.color else None,
+                url=embed.url if embed.url else None
+            )
+
+            # Copy image if exists
+            if embed.image:
+                new_embed.set_image(url=embed.image.url)
+
+            # Copy author information
+            if embed.author:
+                new_embed.set_author(
+                    name=embed.author.name,
+                    url=embed.author.url,
+                    icon_url=embed.author.icon_url
+                )
+
+            # Copy footer if exists
+            if embed.footer:
+                new_embed.set_footer(
+                    text=embed.footer.text,
+                    icon_url=embed.footer.icon_url
+                )
+
+            await ctx.send(f"{t}\n\n- {message.author.display_name}\n{order[50:]}\n{len(order)}\n{ind}", embed=new_embed)
         else:
             await ctx.send(f"{t}\n\n- {message.author.display_name}")
     else:
