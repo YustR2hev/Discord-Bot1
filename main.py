@@ -95,6 +95,13 @@ with open('truth.txt', 'r', encoding='utf-8') as f:
 
 with open('Necoarc_links.txt', 'r', encoding='utf-8') as f: neco_arc_images = f.readlines()
 
+channel = client.get_channel(STAR_CHANNEL_ID)
+messages = [msg async for msg in channel.history(limit=None)]
+order = [range(len(messages))]
+random.shuffle(order)
+ind = 0
+lim = len(messages)
+
 
 @client.event
 async def on_message(message):
@@ -110,12 +117,12 @@ async def on_message(message):
         embed.set_image(url=image_url)
         await message.channel.send(embed=embed)
 
-    if ("invincible" in content_lower or 'invisible' in content_lower) and len(message.attachments) > 0:
-        image_url = 'https://c.tenor.com/Q329gflKk7sAAAAC/tenor.gif'
-
-        embed = discord.Embed(color=discord.Color.blue())
-        embed.set_image(url=image_url)
-        await message.channel.send(embed=embed)
+    # if ("invincible" in content_lower or 'invisible' in content_lower) and len(message.attachments) > 0:
+    #     image_url = 'https://c.tenor.com/Q329gflKk7sAAAAC/tenor.gif'
+    #
+    #     embed = discord.Embed(color=discord.Color.blue())
+    #     embed.set_image(url=image_url)
+    #     await message.channel.send(embed=embed)
 
     if 'wtf' in content_lower or 'what the fuck' in content_lower:
         if message.author.id == ARTY_ID:
@@ -177,17 +184,23 @@ async def wtf(ctx):
 
 @client.command()
 async def quote(ctx):
-    channel = client.get_channel(STAR_CHANNEL_ID)
+    global channel, messages, order, ind, lim
+
+    if ind == lim:
+        messages = [msg async for msg in channel.history(limit=None)]
+        order = [range(len(messages))]
+        random.shuffle(order)
+        ind = 0
+        lim = len(messages)
 
     if not channel:
         await ctx.send("Oops!")
         return
 
-    messages = [msg async for msg in channel.history(limit=400)]
-
     if messages:
         # for i in range(100):
-        message_link = str(random.choice(messages).content.split()[-1])
+        message_link = str(messages[ind].content.split()[-1])
+        ind += 1
 
         regex = r"https://discord\.com/channels/(\d+)/(\d+)/(\d+)"
         match = re.match(regex, message_link)
@@ -197,16 +210,19 @@ async def quote(ctx):
         guild = client.get_guild(guild_id)
         if not guild:
             return await ctx.send("Oops.")
-        channel = guild.get_channel(channel_id)
-        if not channel:
+        channel2 = guild.get_channel(channel_id)
+        if not channel2:
             return await ctx.send("Oops.")
-        message = await channel.fetch_message(message_id)
-        # if len(message.attachments) > 0:
-        #     continue
+        message = await channel2.fetch_message(message_id)
         if "@" in message.content:
             t = message.content.replace('@', '')
         else:
-            await ctx.send(f"{message.content}\n\n- {message.author.display_name}")
+            t = message.content
+
+        if len(message.attachments) > 0:
+            await ctx.send(f"{t}\n\n- {message.author.display_name}", embed=message.embeds[0])
+        else:
+            await ctx.send(f"{t}\n\n- {message.author.display_name}")
     else:
         await ctx.send("No valid messages found!")
 
