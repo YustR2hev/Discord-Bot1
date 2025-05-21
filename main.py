@@ -97,7 +97,7 @@ with open('truth.txt', 'r', encoding='utf-8') as f:
 with open('Necoarc_links.txt', 'r', encoding='utf-8') as f: neco_arc_images = f.readlines()
 
 channel = client.get_channel(STAR_CHANNEL_ID)
-messages = [msg async for msg in channel.history(limit=None)]
+messages = []
 order = [range(len(messages))]
 random.shuffle(order)
 ind = 0
