@@ -1,0 +1,15 @@
+*Use*
+`!giverole <role name>`
+`!takerole <role name>`
+*with **no** angle brackets.*
+
+Here is a list of available roles:
+**SPOILER ROLE**
+```
+everwatching talisman
+```
+
+**CUSTOM ROLES**
+```
+[work in progress]
+```

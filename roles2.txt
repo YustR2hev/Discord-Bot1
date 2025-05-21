@@ -1,0 +1,6 @@
+React to give yourself a role.
+**SPOILER ROLE(Gives access to the update spoilers chanel):**
+`Everwatching Talisman` - :everwatching_talisman:
+
+**CUSTOM ROLES:**
+`[work in progress]` - :hugo:
