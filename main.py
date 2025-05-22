@@ -524,6 +524,31 @@ async def on_ready():
     print(f"Bot is ready. Logged in as {client.user}")
     client.loop.create_task(daily_bonus())
 
+    role_channel = client.get_channel(1374607125543784479)
+    message = [msg async for msg in role_channel.history(limit=1)]
+    if message:
+        await message[0].delete()
+
+    emote_list = [client.get_emoji(1188201048465219615)]
+    message_content = []
+    talisman = client.get_emoji(1374611327494131742)
+    for i in range(5):
+        if i < len(rolestext):
+            line = rolestext[i].strip()
+            if i == 2 and talisman:
+                message_content.append(f"{line} {talisman}")
+            elif line:
+                message_content.append(line)
+
+    for line, emote in zip(rolestext[5:], emote_list):
+        line = line.strip()
+        if line and emote:
+            message_content.append(f"{line} {emote}")
+
+    final_message = "\n".join(message_content)
+
+    await role_channel.send(final_message)
+
 
 @client.command()
 async def help_(ctx):
