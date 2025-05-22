@@ -182,8 +182,8 @@ async def on_reaction_add(reaction, user):
         return
 
     channel_roles = client.get_channel(1374607125543784479)
-    msg = [msg async for msg in channel_roles.history(limit=1)][0]
-
+    msg_id = [msg async for msg in channel_roles.history(limit=1)][0]
+    msg = await channel_roles.fetch_message(msg_id.id)
     if reaction.message.id != msg.id:
         return
 
