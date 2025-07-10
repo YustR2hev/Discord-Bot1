@@ -92,21 +92,21 @@ class Prediction:
         return winners
 
 
-with open('Vile.txt', 'r', encoding='utf-8') as f: vile_ = f.readline()
-with open('Lonely.txt', 'r', encoding='utf-8') as f: lonely_ = f.readline()
-with open('pet.txt', 'r', encoding='utf-8') as f: pet_ = f.readline()
-with open('Arabic.txt', 'r', encoding='utf-8') as f: arabic_ = f.readlines()
-with open('tips.txt', 'r', encoding='utf-8') as f: tips_ = f.readlines()
-with open('help.txt', 'r', encoding='utf-8') as f: help1 = f.readlines()
-with open('roles2.txt', 'r', encoding='utf-8') as f: rolestext = f.readlines()
-with open('Manifesto.txt', 'r', encoding='utf-8') as f:
+with open('/Resources/Text/Vile.txt', 'r', encoding='utf-8') as f: vile_ = f.readline()
+with open('/Resources/Text/Lonely.txt', 'r', encoding='utf-8') as f: lonely_ = f.readline()
+with open('/Resources/Text/pet.txt', 'r', encoding='utf-8') as f: pet_ = f.readline()
+with open('/Resources/Text/Arabic.txt', 'r', encoding='utf-8') as f: arabic_ = f.readlines()
+with open('/Resources/Text/tips.txt', 'r', encoding='utf-8') as f: tips_ = f.readlines()
+with open('/Resources/Text/help.txt', 'r', encoding='utf-8') as f: help1 = f.readlines()
+with open('/Resources/Text/roles2.txt', 'r', encoding='utf-8') as f: rolestext = f.readlines()
+with open('/Resources/Text/Manifesto.txt', 'r', encoding='utf-8') as f:
     manifesto_ = f.readlines()
     manifesto_ = '\n'.join(manifesto_)
-with open('truth.txt', 'r', encoding='utf-8') as f:
+with open('/Resources/Text/truth.txt', 'r', encoding='utf-8') as f:
     truth_ = f.readlines()
     truth_ = '\n'.join(truth_)
 
-with open('Necoarc_links.txt', 'r', encoding='utf-8') as f: neco_arc_images = f.readlines()
+with open('/Resources/Text/Necoarc_links.txt', 'r', encoding='utf-8') as f: neco_arc_images = f.readlines()
 
 messages = []
 order = [range(len(messages))]
