@@ -1,6 +1,14 @@
 React to give yourself a role.
 **SPOILER ROLE(Gives access to the update spoilers chanel):**
-`Everwatching Talisman` - 
+`Everwatching Talisman` -
 
-**CUSTOM ROLES:**
-`[work in progress]` - 
+**PING ROLE(Allows other users to ping you for a streaming event):**
+`Stream announces` -
+
+**COSMETIC ROLES:**
+`Working Class`
+`Glorp Race`
+`Miku Concert`
+`Cult of Neco`
+`CEO Mindset`
+`[still work in progress]`
