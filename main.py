@@ -21,6 +21,7 @@ intents.guilds = True
 intents.reactions = True
 client = commands.Bot(command_prefix='!', intents=intents)
 
+ROLE_MESSAGE_ID = 1392877816281956446
 ARTY_ID = 548369997546782730
 ATRY_COUNTER = 1145 + 1223
 STAR_CHANNEL_ID = 1303737311720247297
@@ -637,9 +638,45 @@ async def roletext(ctx):
         return
 
 
-@client.command()
-async def giverole(ctx, *, role_name: str):
-    pass
+@client.event
+async def on_raw_reaction_add(payload):
+    await handle_reaction(payload, assign_role=True)
+
+
+@client.event
+async def on_raw_reaction_remove(payload):
+    await handle_reaction(payload, assign_role=False)
+
+
+async def handle_reaction(payload, assign_role):
+    if payload.user_id == client.user.id:
+        return
+
+    if payload.message_id != ROLE_MESSAGE_ID:
+        return
+
+    guild = client.get_guild(payload.guild_id)
+    member = guild.get_member(payload.user_id)
+    if not member:
+        return
+
+    emoji_key = str(payload.emoji.id) if payload.emoji.is_custom_emoji() else payload.emoji.name
+
+    role_id = reaction_roles.get(emoji_key)
+    if not role_id:
+        return
+
+    role = guild.get_role(role_id)
+    if not role:
+        return
+
+    try:
+        if assign_role:
+            await member.add_roles(role)
+        else:
+            await member.remove_roles(role)
+    except discord.Forbidden:
+        print(f"Missing permissions to assign/remove role: {role.name}")
 
 
 webserver.keep_alive()
