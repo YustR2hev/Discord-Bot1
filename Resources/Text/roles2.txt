@@ -1,9 +1,9 @@
 React to give yourself a role.
 **SPOILER ROLE(Gives access to the update spoilers chanel):**
-`Everwatching Talisman` -
+`Everwatching Talisman`
 
 **PING ROLE(Allows other users to ping you for a streaming event):**
-`Stream announces` -
+`Stream announces`
 
 **COSMETIC ROLES:**
 `Working Class`
