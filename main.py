@@ -30,8 +30,16 @@ active_users = set()
 balances = defaultdict(lambda: 1000)
 predictions = {}
 
-reaction_roles = {
-    '1374611327494131742': 1374205087970492556,
+reaction_roles = {  # emoteID : roleID
+    '1374611327494131742': 1374205087970492556,  # Everwatching talisman
+    '1387599662537773236': 1353208415412944907,  # Stream announces
+    '1392807702861975553': 1392808004646076568,  # Herd of Bnny
+    '1392796674124021853': 1392714687287918644,  # CEO Mindset
+    '1392796775718457385': 1392719970818850932,  # Cult of Neco
+    '1392796643145023530': 1392705054871388222,  # Miku Concert
+    '1392796852197392476': 1392764674335969431,  # Glorp Race
+    '1392796726267482132': 1392714687287918644,  # Working Class
+    '1188201048465219615': 0,  # WIP
 }
 
 
@@ -150,6 +158,13 @@ async def on_message(message):
 
     if 'stupid' in content_lower:
         emoji = client.get_emoji(1356090731067867197)
+        try:
+            await message.add_reaction(emoji)
+        except discord.HTTPException:
+            print("Failed to react.")
+
+    if 'gro-goroth' in content_lower or 'grogoroth' in content_lower:
+        emoji = client.get_emoji(1200908587409612815)
         try:
             await message.add_reaction(emoji)
         except discord.HTTPException:
@@ -370,6 +385,15 @@ async def skelet(ctx):
 
 
 @client.command()
+async def cereal(ctx):
+    image_url = "https://raw.githubusercontent.com/YustR2hev/Discord-Bot1/refs/heads/main/Resources/Img/Cereal.png"
+
+    embed = discord.Embed(color=discord.Color.yellow())
+    embed.set_image(url=image_url)
+    await ctx.send(embed=embed)
+
+
+@client.command()
 async def byesexual(ctx):
     image_url = 'https://i.redd.it/f9yypxdub0g91.gif'
 
@@ -524,30 +548,30 @@ async def on_ready():
     print(f"Bot is ready. Logged in as {client.user}")
     client.loop.create_task(daily_bonus())
 
-    role_channel = client.get_channel(1374607125543784479)
-    message = [msg async for msg in role_channel.history(limit=1)]
-    if message:
-        await message[0].delete()
-
-    emote_list = [client.get_emoji(1188201048465219615)]
-    message_content = []
-    talisman = client.get_emoji(1374611327494131742)
-    for i in range(5):
-        if i < len(rolestext):
-            line = rolestext[i].strip()
-            if i == 2 and talisman:
-                message_content.append(f"{line} {talisman}")
-            elif line:
-                message_content.append(line)
-
-    for line, emote in zip(rolestext[5:], emote_list):
-        line = line.strip()
-        if line and emote:
-            message_content.append(f"{line} {emote}")
-
-    final_message = "\n".join(message_content)
-
-    await role_channel.send(final_message)
+    # role_channel = client.get_channel(1374607125543784479)
+    # message = [msg async for msg in role_channel.history(limit=1)]
+    # if message:
+    #     await message[0].delete()
+    #
+    # emote_list = [client.get_emoji(1188201048465219615)]
+    # message_content = []
+    # talisman = client.get_emoji(1374611327494131742)
+    # for i in range(5):
+    #     if i < len(rolestext):
+    #         line = rolestext[i].strip()
+    #         if i == 2 and talisman:
+    #             message_content.append(f"{line} {talisman}")
+    #         elif line:
+    #             message_content.append(line)
+    #
+    # for line, emote in zip(rolestext[5:], emote_list):
+    #     line = line.strip()
+    #     if line and emote:
+    #         message_content.append(f"{line} {emote}")
+    #
+    # final_message = "\n".join(message_content)
+    #
+    # await role_channel.send(final_message)
 
 
 @client.command()
@@ -586,25 +610,26 @@ async def react(ctx, message_link: str, emoji: int):
 
 @client.command()
 async def roletext(ctx):
-    emote_list = [client.get_emoji(1188201048465219615)]
+    emote_list = [client.get_emoji(int(x)) for x in reaction_roles.keys()]
     role1 = discord.utils.get(ctx.guild.roles, name="Green Hue")
     role2 = discord.utils.get(ctx.guild.roles, name="Old God")
 
     if role1 in ctx.author.roles or role2 in ctx.author.roles:
         message_content = []
-        talisman = client.get_emoji(1374611327494131742)
-        for i in range(5):
+        for i in range(8):
             if i < len(rolestext):
                 line = rolestext[i].strip()
-                if i == 2 and talisman:
-                    message_content.append(f"{line} {talisman}")
+                if i == 2 and emote_list[0]:
+                    message_content.append(f"{line} - {emote_list[0]}")
+                elif i == 5 and emote_list[1]:
+                    message_content.append(f"{line} - {emote_list[0]}")
                 elif line:
                     message_content.append(line)
 
-        for line, emote in zip(rolestext[5:], emote_list):
+        for line, emote in zip(rolestext[8:], emote_list[2:]):
             line = line.strip()
             if line and emote:
-                message_content.append(f"{line} {emote}")
+                message_content.append(f"{line} - {emote}")
 
         final_message = "\n".join(message_content)
         await ctx.send(final_message)
