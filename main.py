@@ -33,12 +33,12 @@ predictions = {}
 reaction_roles = {  # emoteID : roleID
     '1374611327494131742': 1374205087970492556,  # Everwatching talisman
     '1387599662537773236': 1353208415412944907,  # Stream announces
-    '1392807702861975553': 1392808004646076568,  # Herd of Bnny
-    '1392796674124021853': 1392714687287918644,  # CEO Mindset
-    '1392796775718457385': 1392719970818850932,  # Cult of Neco
-    '1392796643145023530': 1392705054871388222,  # Miku Concert
-    '1392796852197392476': 1392764674335969431,  # Glorp Race
     '1392796726267482132': 1392714687287918644,  # Working Class
+    '1392796852197392476': 1392764674335969431,  # Glorp Race
+    '1392796643145023530': 1392705054871388222,  # Miku Concert
+    '1392796775718457385': 1392719970818850932,  # Cult of Neco
+    '1392796674124021853': 1392714687287918644,  # CEO Mindset
+    '1392807702861975553': 1392808004646076568,  # Herd of Bnny
     '1188201048465219615': 0,  # WIP
 }
 
@@ -622,7 +622,7 @@ async def roletext(ctx):
                 if i == 2 and emote_list[0]:
                     message_content.append(f"{line} - {emote_list[0]}")
                 elif i == 5 and emote_list[1]:
-                    message_content.append(f"{line} - {emote_list[0]}")
+                    message_content.append(f"{line} - {emote_list[1]}")
                 elif line:
                     message_content.append(line)
 
