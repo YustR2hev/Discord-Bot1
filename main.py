@@ -171,7 +171,7 @@ async def on_message(message):
         except discord.HTTPException:
             print("Failed to react.")
 
-    if any([x in content_lower for x in ['faggot', 'nigga', 'nigger', 'retard']]):
+    if any([x in content_lower for x in ['nigga', 'nigger', 'retard']]):
         try:
             await message.add_reaction('🫃')
         except discord.HTTPException:
@@ -681,3 +681,4 @@ async def handle_reaction(payload, assign_role):
 
 webserver.keep_alive()
 client.run(DISCORD_TOKEN)
+
