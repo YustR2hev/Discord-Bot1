@@ -40,6 +40,7 @@ reaction_roles = {  # emoteID : roleID
     '1392796775718457385': 1392719970818850932,  # Cult of Neco
     '1392796674124021853': 1392714687287918644,  # CEO Mindset
     '1392807702861975553': 1392808004646076568,  # Herd of Bnny
+    '1399121519313158354': 1449305381410046035,
     '1188201048465219615': 0,  # WIP
 }
 
@@ -713,6 +714,7 @@ async def handle_reaction(payload, assign_role):
 
 webserver.keep_alive()
 client.run(DISCORD_TOKEN)
+
 
 
 
