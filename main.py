@@ -254,7 +254,7 @@ async def on_reaction_remove(reaction, user):
     except Exception as e:
         print(f"Failed to remove role: {e}")
 
-@bot.command(name='insert')
+@client.command(name='insert')
 async def insert_lines(ctx, message_id: int, *, new_content: str):
     """
     Command to insert lines before the last line of a message.
@@ -713,5 +713,6 @@ async def handle_reaction(payload, assign_role):
 
 webserver.keep_alive()
 client.run(DISCORD_TOKEN)
+
 
 
