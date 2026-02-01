@@ -254,6 +254,38 @@ async def on_reaction_remove(reaction, user):
     except Exception as e:
         print(f"Failed to remove role: {e}")
 
+@bot.command(name='insert')
+async def insert_lines(ctx, message_id: int, *, new_content: str):
+    """
+    Command to insert lines before the last line of a message.
+    Usage: !insert <message_id> <text to insert>
+    """
+    try:
+        # 1. Fetch the target message from the same channel
+        # send() returns the Message object[citation:5], so you can edit it later.
+        target_message = await ctx.channel.fetch_message(message_id)
+
+        # 2. Get the original text and split it into lines
+        original_lines = target_message.content.split('\n')
+        
+        # 3. Prepare the new content: insert user's text before the last line
+        # new_content is what the user provides after the message ID.
+        updated_lines = original_lines[:-1] + [new_content] + original_lines[-1:]
+        
+        # 4. Join the lines back and edit the original message
+        new_message_content = '\n'.join(updated_lines)
+        await target_message.edit(content=new_message_content)
+        
+        # Send a confirmation (optional, and will be a separate new message)
+        await ctx.send(f"✅ Successfully updated message {message_id}.", delete_after=5)
+
+    except discord.NotFound:
+        await ctx.send("❌ Message not found. Make sure the ID is correct and the message is in this channel.", delete_after=10)
+    except discord.Forbidden:
+        await ctx.send("❌ I don't have permission to edit that message.", delete_after=10)
+    except Exception as e:
+        await ctx.send(f"❌ An error occurred: {e}", delete_after=10)
+
 
 @client.command()
 async def wtf(ctx):
@@ -681,4 +713,5 @@ async def handle_reaction(payload, assign_role):
 
 webserver.keep_alive()
 client.run(DISCORD_TOKEN)
+
 
